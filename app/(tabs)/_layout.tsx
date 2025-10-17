@@ -3,7 +3,6 @@ import React from "react";
 import { Alert, Image, View } from "react-native";
 
 import BackOnline from "@/components/BackOnline";
-import LockOverlay from "@/components/LockOverlay";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { useColorScheme } from "@/components/useColorScheme";
 import Colors from "@/constants/Colors";
@@ -124,7 +123,7 @@ export default function TabLayout() {
         />
       </Tabs>
 
-      {isLocked && <LockOverlay />}
+      {/* {isLocked && <LockOverlay />} */}
     </View>
     
   );

@@ -1,5 +1,9 @@
 import client from './client';
-
+export interface Product {
+  id: number;
+  title: string;
+  thumbnail: string;
+}
 export async function fetchProducts() {
   const res = await client.get('/products');
   return res.data;

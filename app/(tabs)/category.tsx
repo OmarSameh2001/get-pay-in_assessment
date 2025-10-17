@@ -1,14 +1,14 @@
+import ProductCard from "@/components/productCard";
 import { RootState } from "@/store/store";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import {
   FlatList,
-  Image,
   RefreshControl,
   StyleSheet,
   Text,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 import { useSelector } from "react-redux";
 import { fetchByCategory } from "../../api/products";
@@ -48,17 +48,13 @@ export default function CategoryScreen() {
           <RefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
         renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Image source={{ uri: item.thumbnail }} style={styles.thumb} />
-            <View style={{ flex: 1, paddingHorizontal: 8 }}>
-              <Text
-                numberOfLines={2}
-                style={{ color: colorScheme === "dark" ? "white" : "black" }}
-              >
-                {item.title}
-              </Text>
-            </View>
-          </View>
+          <ProductCard
+            product={item}
+            colorScheme={colorScheme}
+            isSuper={false}
+            isDeletable={false} // because this is category screen
+            data={data?.products || []}
+          />
         )}
       />
     </View>
