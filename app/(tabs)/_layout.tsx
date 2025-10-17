@@ -7,16 +7,18 @@ import LockOverlay from "@/components/LockOverlay";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { useColorScheme } from "@/components/useColorScheme";
 import Colors from "@/constants/Colors";
-import useAutoLock from "@/hooks/useAutoLock";
+import useBackgroundLock from "@/hooks/useBackgroundLock";
 import { clearCredentials } from "@/store/slices/authSlice";
+import { lock } from "@/store/slices/lockSlice";
 import { RootState } from "@/store/store";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import ReactNativeInactivity from "react-native-inactivity";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  useAutoLock();
+  useBackgroundLock();
   const isLocked = useSelector((s: RootState) => s.lock.isLocked);
 
   const dispatch = useDispatch();
@@ -48,7 +50,21 @@ export default function TabLayout() {
   }
 
   return (
+    
     <View style={{ flex: 1 }}>
+      {!isLocked && <ReactNativeInactivity
+          // isActive
+          onInactive={() => {
+            console.log("Inactivity detected → locking");
+            dispatch(lock());
+          }}
+          timeForInactivity={10000}
+          restartTimerOnActivityAfterExpiration={true}
+          loop={true}
+          style={{display: 'none'}}
+        >
+          {null}
+        </ReactNativeInactivity>}
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -110,5 +126,6 @@ export default function TabLayout() {
 
       {isLocked && <LockOverlay />}
     </View>
+    
   );
 }
