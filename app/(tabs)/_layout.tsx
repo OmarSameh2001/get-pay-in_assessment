@@ -1,59 +1,114 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Alert, Image, View } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import BackOnline from "@/components/BackOnline";
+import LockOverlay from "@/components/LockOverlay";
+import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useColorScheme } from "@/components/useColorScheme";
+import Colors from "@/constants/Colors";
+import useAutoLock from "@/hooks/useAutoLock";
+import { clearCredentials } from "@/store/slices/authSlice";
+import { RootState } from "@/store/store";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  useAutoLock();
+  const isLocked = useSelector((s: RootState) => s.lock.isLocked);
+
+  const dispatch = useDispatch();
+
+  async function doSignOut() {
+    Alert.alert(
+      "Logout?",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: () => {
+            Toast.show({
+              type: "success",
+              text1: "Signed out",
+              text2: "You have successfully signed out.",
+            });
+            dispatch(clearCredentials());
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+    <View style={{ flex: 1 }}>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: useClientOnlyValue(false, true),
           headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <View
+              style={{
+                marginRight: 8,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <BackOnline />
+              <MaterialIcons
+                name="logout"
+                size={24}
+                color="red"
+                onPress={doSignOut}
+              />
+            </View>
           ),
         }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="allProducts"
+          options={{
+            title: "All Products",
+            tabBarIcon: () => (
+              <View>
+                <Image
+                  source={{
+                    uri: "https://thumbs.dreamstime.com/b/product-icon-design-vector-illustration-digital-marketing-324810108.jpg",
+                  }}
+                  style={{ width: 30, height: 30 }}
+                />
+              </View>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="category"
+          options={{
+            title: "Smartphones",
+            tabBarIcon: () => (
+              <View>
+                <Image
+                  source={{
+                    uri: "https://thumbs.dreamstime.com/b/human-hand-holding-smartphone-icon-phone-flat-sign-click-finger-stock-vector-150023049.jpg",
+                  }}
+                  style={{ width: 30, height: 30 }}
+                />
+              </View>
+            ),
+          }}
+        />
+      </Tabs>
+
+      {isLocked && <LockOverlay />}
+    </View>
   );
 }
