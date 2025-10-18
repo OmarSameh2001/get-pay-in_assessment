@@ -7,7 +7,9 @@ export async function login(username: string, password: string) {
   return resp.data as LoginResp;
 }
 
-export async function me() {
-  const resp = await client.get('/auth/me');
+export async function me(token: string) {
+  const resp = await client.get('/auth/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return resp.data;
 }

@@ -1,4 +1,4 @@
-import { login } from "@/api/auth";
+import { login, me } from "@/api/auth";
 import useBiometric from "@/hooks/useBiometric";
 import { setCredentials } from "@/store/slices/authSlice";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -43,7 +43,6 @@ export default function LoginScreen() {
     }
   }
 
-
   // if the user has credentials stored, allow biometric login
   async function preformBiometricLogin() {
     useBiometric({
@@ -69,7 +68,6 @@ export default function LoginScreen() {
     });
   }
 
-
   // common login success actions for both normal and biometric login
   function loginSuccess({
     token,
@@ -89,7 +87,6 @@ export default function LoginScreen() {
     navigate("/(tabs)/allProducts");
   }
 
-
   // check on mount if credentials exist to allow biometric login
   useEffect(() => {
     const checkCredentials = async () => {
@@ -99,7 +96,11 @@ export default function LoginScreen() {
         const id = await SecureStore.getItemAsync("id");
 
         if (token && username && id) {
-          setIsCred(true);
+          const res = await me(token); // verify token is valid
+          if (res)
+            if (res.username === username && res.id === Number(id)) {
+              setIsCred(true);
+            }
         }
       } catch (err) {
         console.error("Error reading secure store:", err);
