@@ -38,10 +38,13 @@ export default function LoginScreen() {
       setLoading(false);
     } catch (e: any) {
       Alert.alert("Login failed", e.message || "Error");
+      console.log("Login error:", e);
       setLoading(false);
     }
   }
 
+
+  // if the user has credentials stored, allow biometric login
   async function preformBiometricLogin() {
     useBiometric({
       message: "Login with Biometrics",
@@ -58,6 +61,7 @@ export default function LoginScreen() {
       },
       failure: () => {
         Alert.alert("Biometric failed");
+        // no callback here because its login not lock
       },
       noBio: () => {
         Alert.alert("No biometric hardware");
@@ -65,6 +69,8 @@ export default function LoginScreen() {
     });
   }
 
+
+  // common login success actions for both normal and biometric login
   function loginSuccess({
     token,
     username,
@@ -83,6 +89,8 @@ export default function LoginScreen() {
     navigate("/(tabs)/allProducts");
   }
 
+
+  // check on mount if credentials exist to allow biometric login
   useEffect(() => {
     const checkCredentials = async () => {
       try {

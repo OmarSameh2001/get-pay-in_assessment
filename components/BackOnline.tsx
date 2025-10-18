@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 
+
+// Component that shows "Back online" message when network is restored
 const BackOnline = () => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState("Back online");

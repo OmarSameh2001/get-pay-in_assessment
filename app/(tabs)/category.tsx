@@ -15,6 +15,8 @@ import { fetchByCategory } from "../../api/products";
 
 const CATEGORY = "smartphones";
 
+
+// Category screen showing products of a specific category and has no delete option
 export default function CategoryScreen() {
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["category", CATEGORY],
@@ -48,6 +50,7 @@ export default function CategoryScreen() {
           <RefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
         renderItem={({ item }) => (
+          // reusable ProductCard component with delete option disabled
           <ProductCard
             product={item}
             colorScheme={colorScheme}

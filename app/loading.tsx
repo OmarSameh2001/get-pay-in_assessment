@@ -1,4 +1,4 @@
-import { View } from "@/components/Themed";
+import { View } from "@/components/expo/Themed";
 import { Image } from "react-native";
 
 export default function Loading() {

@@ -7,6 +7,7 @@ export default function useBackgroundLock() {
   const dispatch = useDispatch();
   const appState = useRef(AppState.currentState);
 
+  // this hook listens for app state changes and locks the app when it goes to background
   useEffect(() => {
     const onAppStateChange = (nextState: AppStateStatus) => {
       if (appState.current.match(/active/) && nextState.match(/inactive|background/)) {

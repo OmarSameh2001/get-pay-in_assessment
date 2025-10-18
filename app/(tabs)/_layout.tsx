@@ -3,8 +3,8 @@ import React from "react";
 import { Alert, Image, View } from "react-native";
 
 import BackOnline from "@/components/BackOnline";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { useColorScheme } from "@/components/useColorScheme";
+import { useClientOnlyValue } from "@/components/expo/useClientOnlyValue";
+import { useColorScheme } from "@/components/expo/useColorScheme";
 import Colors from "@/constants/Colors";
 import useBackgroundLock from "@/hooks/useBackgroundLock";
 import { clearCredentials } from "@/store/slices/authSlice";

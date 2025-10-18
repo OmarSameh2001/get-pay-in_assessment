@@ -15,6 +15,8 @@ import { fetchProducts, Product } from "../../api/products";
 import { setOffline } from "../../store/slices/networkSlice";
 import { RootState } from "../../store/store";
 
+
+// All Products screen showing all products and allows delete option for superadmin
 export default function AllProductsScreen() {
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["products"],
@@ -50,6 +52,7 @@ export default function AllProductsScreen() {
           <RefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
         renderItem={({ item }: { item: Product }) => (
+          // reusable ProductCard component with delete option enabled
           <ProductCard
             product={item}
             data={data?.products || []}

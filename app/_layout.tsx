@@ -12,8 +12,8 @@ import "react-native-reanimated";
 
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
+import { useColorScheme } from "@/components/expo/useColorScheme";
 import { persister, queryClient } from "@/components/queryClient";
-import { useColorScheme } from "@/components/useColorScheme";
 import { RootState, store } from "@/store/store";
 import Toast from "react-native-toast-message";
 import { Provider, useSelector } from "react-redux";
