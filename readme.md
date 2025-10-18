@@ -38,3 +38,7 @@ password: mateonpass
 - Didnt have time for making test cases
 
 ### UI
+<img width="368" height="832" alt="getpay-1" src="https://github.com/user-attachments/assets/6603e159-5db9-4304-a43c-2b5025335e29" />
+<img width="396" height="839" alt="getpay-2" src="https://github.com/user-attachments/assets/0a590675-7769-4870-9448-a78534166979" />
+
+
